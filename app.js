@@ -25,39 +25,28 @@ var cookieParser = require('cookie-parser');
 var methodOverride = require('method-override');
 var errorhandler = require('errorhandler');
 var basicAuth = require('basic-auth');
+var serveStatic = require('serve-static');
 
 // all environments
 app.set('port', process.env.PORT || 3000);
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
-//app.use(express.favicon());
-//app.use(express.logger('dev'));
 app.use(logger(':method :url'));
-//app.use(express.methodOverride());
 app.use(methodOverride('_method'));
-//app.use(express.cookieParser('your secret here'));
 app.use(cookieParser('my secret here'));
-//app.use(express.bodyParser());
-app.use(bodyParser.urlencoded({ extended: false }));
-//app.use(express.session());
+//app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(session({
 	resave: false, // don't save session if unmodified
 	saveUninitialized: false, // don't create session until something stored
 	secret: 'shhhh, very secret'
 }));
-app.use(express.static(path.join(__dirname, 'public')));
+
+app.use(serveStatic(path.join(__dirname, 'public')));
+
 app.use('/api', api.auth);
 app.use(user);
 app.use(messages);
-app.use(app.router);
-app.use(routes.notfound);
-app.use(routes.error);
-
-// development only
-if ('development' == app.get('env')) {
-	//app.use(express.errorHandler());
-	app.use(errorHandler());
-}
 
 app.get('/register', register.form);
 app.post('/register', register.submit);
@@ -82,6 +71,15 @@ if (process.env.ERROR_ROUTE) {
 		err.type = 'database';
 		next(err);
 	});
+}
+
+app.use(routes.notfound);
+app.use(routes.error);
+
+// development only
+if ('development' == app.get('env')) {
+	//app.use(express.errorHandler());
+	app.use(errorhandler());
 }
 
 http.createServer(app).listen(app.get('port'), function(){
