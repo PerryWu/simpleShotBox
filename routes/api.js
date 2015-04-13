@@ -1,8 +1,10 @@
 var express = require('express');
 var User = require('../lib/user');
 var Entry = require('../lib/entry');
+var basicAuth = require('basic-auth');
 
-exports.auth = express.basicAuth(User.authenticate);
+//exports.auth = express.basicAuth(User.authenticate);
+exports.auth = basicAuth(User.authenticate);
 
 exports.user = function(req, res, next){
 	User.get(req.params.id, function(err, user){
