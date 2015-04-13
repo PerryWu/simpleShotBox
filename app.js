@@ -1,6 +1,6 @@
 /**
- * Module dependencies.
- */
+* Module dependencies.
+*/
 
 var api = require('./routes/api');
 var entries = require('./routes/entries');
@@ -38,7 +38,7 @@ app.use(routes.error);
 
 // development only
 if ('development' == app.get('env')) {
-  app.use(express.errorHandler());
+	app.use(express.errorHandler());
 }
 
 app.get('/register', register.form);
@@ -48,10 +48,10 @@ app.post('/login', login.submit);
 app.get('/logout', login.logout);
 app.get('/post', entries.form);
 app.post(
-   '/post',
-   validate.required('entry[title]'),
-   validate.lengthAbove('entry[title]', 4),
-   entries.submit
+	'/post',
+	validate.required('entry[title]'),
+	validate.lengthAbove('entry[title]', 4),
+	entries.submit
 );
 app.get('/api/user/:id', api.user);
 app.post('/api/entry', entries.submit);
@@ -59,13 +59,13 @@ app.get('/api/entries/:page?', page(Entry.count), api.entries);
 app.get('/:page?', page(Entry.count, 5), entries.list);
 
 if (process.env.ERROR_ROUTE) {
-  app.get('/dev/error', function(req, res, next){
-    var err = new Error('database connection failed');
-    err.type = 'database';
-    next(err);
-  });
+	app.get('/dev/error', function(req, res, next){
+		var err = new Error('database connection failed');
+		err.type = 'database';
+		next(err);
+	});
 }
 
 http.createServer(app).listen(app.get('port'), function(){
-  console.log('Express server listening on port ' + app.get('port'));
+	console.log('Express server listening on port ' + app.get('port'));
 });
