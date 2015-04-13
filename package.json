@@ -1,0 +1,14 @@
+{
+  "name": "application-name",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "ejs": "*",
+    "bcrypt": "0.7.3",
+    "redis": "0.7.2",
+    "express": "~4.12.3"
+  }
+}
